@@ -1,0 +1,4 @@
+python-dateutil
+six
+convertdate<=2.2.0
+korean_lunar_calendar

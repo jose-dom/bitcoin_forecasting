@@ -1,0 +1,4 @@
+[console_scripts]
+install_cmdstan = cmdstanpy.install_cmdstan:main
+install_cxx_toolchain = cmdstanpy.install_cxx_toolchain:main
+

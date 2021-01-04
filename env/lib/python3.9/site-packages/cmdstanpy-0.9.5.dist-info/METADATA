@@ -1,0 +1,89 @@
+Metadata-Version: 2.1
+Name: cmdstanpy
+Version: 0.9.5
+Summary: Python interface to CmdStan
+Home-page: https://github.com/stan-dev/cmdstanpy
+Author: Stan Dev Team
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Science/Research
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Description-Content-Type: text/markdown
+Requires-Dist: numpy
+Requires-Dist: pandas
+Provides-Extra: all
+Requires-Dist: tqdm ; extra == 'all'
+Requires-Dist: ujson ; extra == 'all'
+Provides-Extra: docs
+Requires-Dist: sphinx ; extra == 'docs'
+Requires-Dist: sphinx-gallery ; extra == 'docs'
+Requires-Dist: sphinx-rtd-theme ; extra == 'docs'
+Requires-Dist: numpydoc ; extra == 'docs'
+Requires-Dist: matplotlib ; extra == 'docs'
+Provides-Extra: tests
+Requires-Dist: pytest ; extra == 'tests'
+Requires-Dist: pytest-cov ; extra == 'tests'
+Requires-Dist: testfixtures ; extra == 'tests'
+
+# CmdStanPy
+
+[![codecov](https://codecov.io/gh/stan-dev/cmdstanpy/branch/master/graph/badge.svg)](https://codecov.io/gh/stan-dev/cmdstanpy)
+
+
+CmdStanPy is a lightweight interface to Stan for Python users which
+provides the necessary objects and functions to do Bayesian inference
+given a probability model written as a Stan program and data.
+Under the hood, CmdStanPy uses the CmdStan command line interface
+to compile and run a Stan program.
+
+### Goals
+
+- Clean interface to Stan services so that CmdStanPy can keep up with Stan releases.
+
+- Provides complete control - all sampler arguments have corresponding named argument
+for CmdStanPy sampler function.
+
+- Easy to install,
+  + minimal Python library dependencies: numpy, pandas
+  + Python code doesn't interface directly with c++, only calls compiled executables
+
+- Modular - CmdStanPy produces a sample from the posterior, downstream modules do the analysis.
+
+### Docs
+
+See https://cmdstanpy.readthedocs.io/en/latest/index.html
+
+### Source Repository
+
+CmdStan's source-code repository is hosted here on GitHub.
+
+### Licensing
+
+The CmdStanPy, CmdStan, and the core Stan C++ code are licensed under new BSD.
+
+### Example
+
+::
+
+    import os
+    from cmdstanpy import CmdStanModel, cmdstan_path
+
+    # specify Stan file, create, compile CmdStanModel object
+    bernoulli_path = os.path.join(cmdstan_path(), 'examples', 'bernoulli', 'bernoulli.stan')
+    bernoulli_model = CmdStanModel(stan_file=bernoulli_path)
+
+
+    # specify data, fit the model
+    bernoulli_data = { "N" : 10, "y" : [0,1,0,0,0,0,0,0,0,1] }
+    bernoulli_fit = bernoulli_model.sample(chains=5, cores=3, data=bernoulli_data)
+
+    # summarize the results (wraps CmdStan `bin/stansummary`):
+    bernoulli_fit.summary()
+
+
